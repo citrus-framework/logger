@@ -17,11 +17,11 @@ composer_reload:
 
 .PHONY: composer_develop
 composer_develop:
-	@composer install -vvv --dev --prefer-dist --optimize-autoloader
+	@composer install -vv --dev --prefer-dist --optimize-autoloader
 
 .PHONY: composer_public
 composer_public:
-	@composer install -vvv --no-dev --prefer-dist --optimize-autoloader
+	@composer install -vv --no-dev --prefer-dist --optimize-autoloader
 
 .PHONY: composer_check
 composer_check:
