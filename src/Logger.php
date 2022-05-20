@@ -25,7 +25,7 @@ class Logger extends Configurable
     use Singleton;
 
     /** @var LogOutput ログタイプ別のインスタンス */
-    protected $logger;
+    protected LogOutput $logger;
 
 
 
@@ -53,7 +53,7 @@ class Logger extends Configurable
      *
      * @param mixed $value
      */
-    public static function trace($value): void
+    public static function trace(mixed $value): void
     {
         self::sharedInstance()->output(Level::TRACE, $value, func_get_args());
     }
@@ -65,7 +65,7 @@ class Logger extends Configurable
      *
      * @param mixed $value
      */
-    public static function debug($value): void
+    public static function debug(mixed $value): void
     {
         self::sharedInstance()->output(Level::DEBUG, $value, func_get_args());
     }
@@ -77,7 +77,7 @@ class Logger extends Configurable
      *
      * @param mixed $value
      */
-    public static function info($value): void
+    public static function info(mixed $value): void
     {
         self::sharedInstance()->output(Level::INFO, $value, func_get_args());
     }
@@ -89,7 +89,7 @@ class Logger extends Configurable
      *
      * @param mixed $value
      */
-    public static function warn($value): void
+    public static function warn(mixed $value): void
     {
         self::sharedInstance()->output(Level::WARNING, $value, func_get_args());
     }
@@ -101,7 +101,7 @@ class Logger extends Configurable
      *
      * @param mixed $value
      */
-    public static function error($value): void
+    public static function error(mixed $value): void
     {
         self::sharedInstance()->output(Level::ERROR, $value, func_get_args());
     }
@@ -113,7 +113,7 @@ class Logger extends Configurable
      *
      * @param mixed $value
      */
-    public static function fatal($value): void
+    public static function fatal(mixed $value): void
     {
         self::sharedInstance()->output(Level::FATAL, $value, func_get_args());
     }

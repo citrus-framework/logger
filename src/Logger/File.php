@@ -20,19 +20,19 @@ class File implements LogOutput
     use Structs;
 
     /** @var string */
-    public $directory;
+    public string $directory;
 
     /** @var string */
-    public $filename;
+    public string $filename;
 
     /** @var string */
-    public $owner = 'wwwrun';
+    public string $owner = 'wwwrun';
 
     /** @var string */
-    public $group = 'www';
+    public string $group = 'www';
 
     /** @var int */
-    public $mode = 0666;
+    public int $mode = 0666;
 
 
 
@@ -55,10 +55,11 @@ class File implements LogOutput
      * @param array $params パラメーター
      * @return void
      */
-    public function output($value, array $params = []): void
+    public function output(mixed $value, array $params = []): void
     {
         // ログファイル名
-        $filepath = sprintf('%s%s-%s',
+        $filepath = sprintf(
+            '%s%s-%s',
             $this->directory,
             $this->filename,
             date('Ymd', $_SERVER['REQUEST_TIME'])
