@@ -123,12 +123,12 @@ class Logger extends Configurable
     /**
      * output log file
      *
-     * @param string $level  ログレベル
+     * @param Level  $level  ログレベル
      * @param mixed  $value  ログの内容
      * @param array  $params パラメータ
      * @return void
      */
-    public function output(string $level, $value, array $params): void
+    public function output(Level $level, $value, array $params): void
     {
         // ログレベルによる出力許容チェック
         if (false === self::isOutputableLevel($level))
@@ -158,15 +158,15 @@ class Logger extends Configurable
     /**
      * コンフィグ設定で指定されたログを出力するレベルか判定する
      *
-     * @param string $level ログレベル
+     * @param Level $level ログレベル
      * @return bool
      */
-    public function isOutputableLevel(string $level): bool
+    public function isOutputableLevel(Level $level): bool
     {
         // 出力設定のログレベル
-        $configure_level_index = array_search($this->configures['level'], Level::$LEVELS, true);
+        $configure_level_index = array_search($this->configures['level'], Level::cases(), true);
         // 出力しようとしているログレベル
-        $target_level_index = array_search($level, Level::$LEVELS, true);
+        $target_level_index = array_search($level, Level::cases(), true);
         // 出力設定のログレベル <= 出力しようとしているログレベル
         return ($configure_level_index <= $target_level_index);
     }
