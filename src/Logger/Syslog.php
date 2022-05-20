@@ -20,10 +20,10 @@ class Syslog implements LogOutput
     use Structs;
 
     /** @var string */
-    public $directory;
+    public string $directory;
 
     /** @var string */
-    public $filename;
+    public string $filename;
 
 
 
@@ -45,7 +45,7 @@ class Syslog implements LogOutput
      * @param mixed $value  ログ内容
      * @param array $params パラメーター
      */
-    public function output($value, array $params = []): void
+    public function output(mixed $value, array $params = []): void
     {
         // 出力データ
         $vl_dump = (true === is_string($value)

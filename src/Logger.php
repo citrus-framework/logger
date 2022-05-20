@@ -25,7 +25,7 @@ class Logger extends Configurable
     use Singleton;
 
     /** @var LogOutput ログタイプ別のインスタンス */
-    protected $logger;
+    protected LogOutput $logger;
 
 
 
@@ -53,7 +53,7 @@ class Logger extends Configurable
      *
      * @param mixed $value
      */
-    public static function trace($value): void
+    public static function trace(mixed $value): void
     {
         self::sharedInstance()->output(Level::TRACE, $value, func_get_args());
     }
@@ -65,7 +65,7 @@ class Logger extends Configurable
      *
      * @param mixed $value
      */
-    public static function debug($value): void
+    public static function debug(mixed $value): void
     {
         self::sharedInstance()->output(Level::DEBUG, $value, func_get_args());
     }
@@ -77,7 +77,7 @@ class Logger extends Configurable
      *
      * @param mixed $value
      */
-    public static function info($value): void
+    public static function info(mixed $value): void
     {
         self::sharedInstance()->output(Level::INFO, $value, func_get_args());
     }
@@ -89,7 +89,7 @@ class Logger extends Configurable
      *
      * @param mixed $value
      */
-    public static function warn($value): void
+    public static function warn(mixed $value): void
     {
         self::sharedInstance()->output(Level::WARNING, $value, func_get_args());
     }
@@ -101,7 +101,7 @@ class Logger extends Configurable
      *
      * @param mixed $value
      */
-    public static function error($value): void
+    public static function error(mixed $value): void
     {
         self::sharedInstance()->output(Level::ERROR, $value, func_get_args());
     }
@@ -113,7 +113,7 @@ class Logger extends Configurable
      *
      * @param mixed $value
      */
-    public static function fatal($value): void
+    public static function fatal(mixed $value): void
     {
         self::sharedInstance()->output(Level::FATAL, $value, func_get_args());
     }
@@ -123,12 +123,12 @@ class Logger extends Configurable
     /**
      * output log file
      *
-     * @param string $level  ログレベル
+     * @param Level  $level  ログレベル
      * @param mixed  $value  ログの内容
      * @param array  $params パラメータ
      * @return void
      */
-    public function output(string $level, $value, array $params): void
+    public function output(Level $level, $value, array $params): void
     {
         // ログレベルによる出力許容チェック
         if (false === self::isOutputableLevel($level))
@@ -158,15 +158,15 @@ class Logger extends Configurable
     /**
      * コンフィグ設定で指定されたログを出力するレベルか判定する
      *
-     * @param string $level ログレベル
+     * @param Level $level ログレベル
      * @return bool
      */
-    public function isOutputableLevel(string $level): bool
+    public function isOutputableLevel(Level $level): bool
     {
         // 出力設定のログレベル
-        $configure_level_index = array_search($this->configures['level'], Level::$LEVELS, true);
+        $configure_level_index = array_search($this->configures['level'], Level::cases(), true);
         // 出力しようとしているログレベル
-        $target_level_index = array_search($level, Level::$LEVELS, true);
+        $target_level_index = array_search($level, Level::cases(), true);
         // 出力設定のログレベル <= 出力しようとしているログレベル
         return ($configure_level_index <= $target_level_index);
     }

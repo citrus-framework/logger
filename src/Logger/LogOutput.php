@@ -21,5 +21,5 @@ interface LogOutput
      * @param mixed $value  ログ内容
      * @param array $params パラメーター
      */
-    public function output($value, array $params = []): void;
+    public function output(mixed $value, array $params = []): void;
 }
