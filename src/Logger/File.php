@@ -10,14 +10,14 @@ declare(strict_types=1);
 
 namespace Citrus\Logger;
 
-use Citrus\Variable\Structs;
+use Citrus\Variable\Binders;
 
 /**
  * ファイル出力ロガー
  */
 class File implements LogOutput
 {
-    use Structs;
+    use Binders;
 
     /** @var string */
     public string $directory;
@@ -43,7 +43,7 @@ class File implements LogOutput
      */
     public function __construct(array $configure = [])
     {
-        $this->bind($configure);
+        $this->bindArray($configure);
     }
 
 
