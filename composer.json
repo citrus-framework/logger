@@ -15,9 +15,9 @@
     "citrus-framework/variables": "^1.0"
   },
   "require-dev": {
-    "php": "^8.1",
-    "phpunit/phpunit": "^9.5",
-    "nunomaduro/phpinsights": "^v2.0"
+    "php": "^8.3",
+    "phpunit/phpunit": "^10",
+    "nunomaduro/phpinsights": "^v2"
   },
   "autoload": {
     "psr-4": {
