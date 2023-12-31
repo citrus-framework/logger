@@ -21,7 +21,7 @@ class LoggerTest extends TestCase
     use TestFile;
 
     /** @var Logger */
-    public $logger;
+    public Logger $logger;
 
 
 
@@ -36,8 +36,6 @@ class LoggerTest extends TestCase
         $this->logger = Logger::sharedInstance();
     }
 
-
-
     /**
      * {@inheritDoc}
      */
@@ -51,8 +49,6 @@ class LoggerTest extends TestCase
             $this->forceRemove($this->logger->configures['directory']);
         }
     }
-
-
 
     /**
      * @test
