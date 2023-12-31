@@ -15,7 +15,7 @@ use Citrus\Variable\Binders;
 /**
  * ファイル出力ロガー
  */
-class File implements LogOutput
+class File extends \stdClass implements LogOutput
 {
     use Binders;
 
@@ -46,8 +46,6 @@ class File implements LogOutput
         $this->bindArray($configure);
     }
 
-
-
     /**
      * output log file
      *
@@ -74,8 +72,6 @@ class File implements LogOutput
         // ファイル書き込み
         $this->write($filepath, $data);
     }
-
-
 
     /**
      * ファイル書き込み

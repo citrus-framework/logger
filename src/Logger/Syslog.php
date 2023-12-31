@@ -15,7 +15,7 @@ use Citrus\Variable\Binders;
 /**
  * Syslog出力ロガー
  */
-class Syslog implements LogOutput
+class Syslog extends \stdClass implements LogOutput
 {
     use Binders;
 
@@ -36,8 +36,6 @@ class Syslog implements LogOutput
     {
         $this->bindArray($configure);
     }
-
-
 
     /**
      * output log syslog
