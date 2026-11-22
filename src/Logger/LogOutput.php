@@ -17,9 +17,8 @@ interface LogOutput
 {
     /**
      * output
-     *
-     * @param mixed $value  ログ内容
-     * @param array $params パラメーター
+     * @param object|array|string|int|float|bool|null $value  ログ内容
+     * @param array                                   $params パラメーター
      */
-    public function output(mixed $value, array $params = []): void;
+    public function output(object|array|string|int|float|bool|null $value, array $params = []): void;
 }

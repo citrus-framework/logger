@@ -25,11 +25,8 @@ class Syslog extends \stdClass implements LogOutput
     /** @var string */
     public string $filename;
 
-
-
     /**
      * constructor
-     *
      * @param array $configure
      */
     public function __construct(array $configure = [])
@@ -39,14 +36,16 @@ class Syslog extends \stdClass implements LogOutput
 
     /**
      * output log syslog
-     *
-     * @param mixed $value  ログ内容
-     * @param array $params パラメーター
+     * @param object|array|string|int|float|bool|null $value  ログ内容
+     * @param array                                   $params パラメーター
      */
-    public function output(mixed $value, array $params = []): void
+    public function output(object|array|string|int|float|bool|null $value, array $params = []): void
     {
+        // 直接呼ばれたときも、例外は秘密が出ない文字列に置き換える
+        [$value, $params] = ValueNormalizer::normalize($value, $params);
+
         // 出力データ
-        $vl_dump = (true === is_string($value)
+        $vl_dump = (is_string($value) === true
             ? vsprintf($value, $params) . PHP_EOL
             : var_export($value, true));
         $data = date('[Y-m-d H:i:s] ', $_SERVER['REQUEST_TIME']) . htmlspecialchars_decode(strip_tags($vl_dump));
