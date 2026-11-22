@@ -14,6 +14,7 @@ use Citrus\Configure\Configurable;
 use Citrus\Logger\File;
 use Citrus\Logger\Level;
 use Citrus\Logger\LogOutput;
+use Citrus\Logger\ValueNormalizer;
 use Citrus\Variable\Dates;
 use Citrus\Variable\Singleton;
 
@@ -26,8 +27,6 @@ class Logger extends Configurable
 
     /** @var LogOutput ログタイプ別のインスタンス */
     protected LogOutput $logger;
-
-
 
     /**
      * {@inheritDoc}
@@ -46,92 +45,71 @@ class Logger extends Configurable
         return $this;
     }
 
-
-
     /**
      * trace log file
-     *
-     * @param mixed $value
+     * @param object|array|string|int|float|bool|null $value
      */
-    public static function trace(mixed $value): void
+    public static function trace(object|array|string|int|float|bool|null $value): void
     {
         self::sharedInstance()->output(Level::TRACE, $value, func_get_args());
     }
 
-
-
     /**
      * debug log file
-     *
-     * @param mixed $value
+     * @param object|array|string|int|float|bool|null $value
      */
-    public static function debug(mixed $value): void
+    public static function debug(object|array|string|int|float|bool|null $value): void
     {
         self::sharedInstance()->output(Level::DEBUG, $value, func_get_args());
     }
 
-
-
     /**
      * info log file
-     *
-     * @param mixed $value
+     * @param object|array|string|int|float|bool|null $value
      */
-    public static function info(mixed $value): void
+    public static function info(object|array|string|int|float|bool|null $value): void
     {
         self::sharedInstance()->output(Level::INFO, $value, func_get_args());
     }
 
-
-
     /**
      * warn log file
-     *
-     * @param mixed $value
+     * @param object|array|string|int|float|bool|null $value
      */
-    public static function warn(mixed $value): void
+    public static function warn(object|array|string|int|float|bool|null $value): void
     {
         self::sharedInstance()->output(Level::WARNING, $value, func_get_args());
     }
 
-
-
     /**
      * error log file
-     *
-     * @param mixed $value
+     * @param object|array|string|int|float|bool|null $value
      */
-    public static function error(mixed $value): void
+    public static function error(object|array|string|int|float|bool|null $value): void
     {
         self::sharedInstance()->output(Level::ERROR, $value, func_get_args());
     }
 
-
-
     /**
      * fatal log file
-     *
-     * @param mixed $value
+     * @param object|array|string|int|float|bool|null $value
      */
-    public static function fatal(mixed $value): void
+    public static function fatal(object|array|string|int|float|bool|null $value): void
     {
         self::sharedInstance()->output(Level::FATAL, $value, func_get_args());
     }
 
-
-
     /**
      * output log file
-     *
-     * @param Level  $level  ログレベル
-     * @param mixed  $value  ログの内容
-     * @param array  $params パラメータ
+     * @param Level                                   $level  ログレベル
+     * @param object|array|string|int|float|bool|null $value  ログの内容
+     * @param array                                   $params パラメータ
      * @return void
      */
-    public function output(Level $level, $value, array $params): void
+    public function output(Level $level, object|array|string|int|float|bool|null $value, array $params): void
     {
         // ログレベルによる出力許容チェック
-        if (false === self::isOutputableLevel($level))
+        if (self::isOutputableLevel($level) === false)
         {
             return;
         }
@@ -139,25 +117,23 @@ class Logger extends Configurable
         // パラメーターの一つ目はメソッドなのでずらす
         array_shift($params);
 
+        // 例外は、秘密が出ない文字列に置き換える
+        [$value, $params] = ValueNormalizer::normalize($value, $params);
+
         // 表示
-        if (true === $this->configures['display'])
+        if ($this->configures['display'] === true)
         {
-            // 表示情報
-            $display_value = (true === is_string($value) ? vsprintf($value, $params) : $value);
             // ダンプ表示
             var_dump([
                 Dates::now()->format('Y-m-d H:i:s'),
-                $display_value,
+                ValueNormalizer::display($value, $params),
             ]);
         }
         $this->logger->output($value, $params);
     }
 
-
-
     /**
      * コンフィグ設定で指定されたログを出力するレベルか判定する
-     *
      * @param Level $level ログレベル
      * @return bool
      */
@@ -171,8 +147,6 @@ class Logger extends Configurable
         return ($configure_level_index <= $target_level_index);
     }
 
-
-
     /**
      * {@inheritDoc}
      */
@@ -181,16 +155,11 @@ class Logger extends Configurable
         return 'logger';
     }
 
-
-
     /**
      * {@inheritDoc}
      */
     protected function configureDefaults(): array
     {
-        // ロガータイプ
-        $type = ($this->configures['type'] ?? null);
-
         // 共通
         $defaults = [
             'level' => Level::INFO,
@@ -198,7 +167,7 @@ class Logger extends Configurable
         ];
 
         // ファイルの場合
-        if (File::class === $type)
+        if ($this->configureType() === File::class)
         {
             $defaults += [
                 'owner' => posix_getpwuid(posix_geteuid())['name'],
@@ -210,23 +179,18 @@ class Logger extends Configurable
         return $defaults;
     }
 
-
-
     /**
      * {@inheritDoc}
      */
     protected function configureRequires(): array
     {
-        // ロガータイプ
-        $type = ($this->configures['type'] ?? null);
-
         // 共通
         $requires = [
             'type',
         ];
 
         // ファイルの場合
-        if (File::class === $type)
+        if ($this->configureType() === File::class)
         {
             $requires += [
                 'directory',
@@ -238,5 +202,14 @@ class Logger extends Configurable
         }
 
         return $requires;
+    }
+
+    /**
+     * ロガータイプ
+     * @return string|null
+     */
+    private function configureType(): ?string
+    {
+        return ($this->configures['type'] ?? null);
     }
 }
