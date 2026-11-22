@@ -54,19 +54,22 @@ class File extends \stdClass implements LogOutput
         // 直接呼ばれたときも、例外は秘密が出ない文字列に置き換える
         [$value, $params] = ValueNormalizer::normalize($value, $params);
 
+        // 書き込み時点の日時
+        $now = time();
+
         // ログファイル名
         $filepath = sprintf(
             '%s%s-%s',
             $this->directory,
             $this->filename,
-            date('Ymd', $_SERVER['REQUEST_TIME'])
+            date('Ymd', $now)
         );
 
         // 出力データ
         $vl_dump = (is_string($value) === true
             ? vsprintf($value, $params) . PHP_EOL
             : var_export($value, true));
-        $data = date('[Y-m-d H:i:s] ', $_SERVER['REQUEST_TIME']) . htmlspecialchars_decode(strip_tags($vl_dump));
+        $data = date('[Y-m-d H:i:s] ', $now) . htmlspecialchars_decode(strip_tags($vl_dump));
 
         // ファイル書き込み
         $this->write($filepath, $data);
@@ -91,6 +94,12 @@ class File extends \stdClass implements LogOutput
 
         // writing log
         $file = fopen($filepath, 'a+');
+        // 失敗した場合は、PHP のエラーログに書いて終わる
+        if ($file === false)
+        {
+            error_log($data);
+            return;
+        }
         fwrite($file, $data);
         fclose($file);
 

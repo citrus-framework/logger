@@ -48,7 +48,8 @@ class Syslog extends \stdClass implements LogOutput
         $vl_dump = (is_string($value) === true
             ? vsprintf($value, $params) . PHP_EOL
             : var_export($value, true));
-        $data = date('[Y-m-d H:i:s] ', $_SERVER['REQUEST_TIME']) . htmlspecialchars_decode(strip_tags($vl_dump));
+        // 書き込み時点の日時
+        $data = date('[Y-m-d H:i:s] ') . htmlspecialchars_decode(strip_tags($vl_dump));
 
         syslog(LOG_INFO, $data);
     }
