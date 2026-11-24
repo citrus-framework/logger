@@ -7,6 +7,9 @@ return [
     'exclude' => [
     ],
     'add' => [
+        NunoMaduro\PhpInsights\Domain\Metrics\Code\Functions::class => [
+            SlevomatCodingStandard\Sniffs\Functions\RequireArrowFunctionSniff::class,
+        ],
     ],
     'remove' => [
         // Code
@@ -17,9 +20,9 @@ return [
         PHP_CodeSniffer\Standards\Generic\Sniffs\CodeAnalysis\UselessOverridingMethodSniff::class,
         SlevomatCodingStandard\Sniffs\Commenting\UselessInheritDocCommentSniff::class,
         SlevomatCodingStandard\Sniffs\ControlStructures\LanguageConstructWithParenthesesSniff::class,
-        SlevomatCodingStandard\Sniffs\Functions\StaticClosureSniff::class,
         SlevomatCodingStandard\Sniffs\PHP\UselessParenthesesSniff::class,
         SlevomatCodingStandard\Sniffs\TypeHints\DisallowArrayTypeHintSyntaxSniff::class,
+        SlevomatCodingStandard\Sniffs\TypeHints\DisallowMixedTypeHintSniff::class,
         SlevomatCodingStandard\Sniffs\TypeHints\ParameterTypeHintSniff::class,
         SlevomatCodingStandard\Sniffs\TypeHints\PropertyTypeHintSniff::class,
         SlevomatCodingStandard\Sniffs\TypeHints\ReturnTypeHintSniff::class,
